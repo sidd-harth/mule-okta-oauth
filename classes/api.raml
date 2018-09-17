@@ -1,0 +1,93 @@
+#%RAML 0.8
+title: Okta OAuth
+version: v1
+
+/getToken:
+  post:
+    description: Get an Access Token
+    body:
+        application/x-www-form-urlencoded:
+          formParameters:
+            client_id:
+              description: Okta App Client_id.
+              type: string 
+              example: 0oabdnelyuUcFeBST0h7       
+            client_secret:
+              description: Okta App Client_secret.
+              type: string
+              example: FUcZlNfYd0XmExqp1xjbxVbFpp2z8ck1ospOz8iH
+            grant_type:
+              description: this is gran type of OAuth.
+              example: password
+              type: string
+            username:
+              description: E-Mail Address of user within Okta.
+              example: hcl@sid.com
+              type: string
+            password:
+              description: Password of user within Okta.
+              example: Password123
+              type: string
+            scope:
+              description: For testing purpose use offline_access.
+              example: offline_access
+              type: string
+            redirect_url:
+              description: Okta App url.
+              example: https://sample.website.com      
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: |
+              {
+                "access_token": "eyJhbGciOiJSUzI1..........urKPeWl7meazfQbQ",
+                "token_type": "Bearer",
+                "expires_in": 3600,
+                "scope": "offline_access",
+                "refresh_token": "kItlD_RFSqELcvhQKLJMMXAxtmVVwu0B1Czaq91scO4"
+              }
+/validateToken:
+  post:
+    description: |
+      Use the Access Token you recieved in "getToken" resource & check if it is valid or not. 
+      It has two responses mapped as per the token status.
+    body:
+        application/x-www-form-urlencoded:
+          formParameters:
+            token:
+              description: enter the token to be validated.
+              type: string
+            token_type_hint:
+              description: Token type.
+              type: string
+              example: access_token
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: |
+              {
+              "token":"valid"
+              }
+/revokeToken:
+  post:
+    description: Revoke Access Token
+    body:
+        application/x-www-form-urlencoded:
+          formParameters:
+            token:
+              description: enter the token to be revoked.
+              type: string
+            token_type_hint:
+              description: Token type.
+              type: string
+              example: access_token
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: |
+              {
+              "token":"revoked"
+              }
